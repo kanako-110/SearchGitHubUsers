@@ -1,7 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { usersData } from "./UserList";
 import { Octokit } from "@octokit/core";
+
+// TODO
+// STILL I CAN HAVE ONLY 30 AT MOST? WHEN I RECEIVE FROM API
+// LOOKS
+// have page if its too many
 
 interface onSubmit {
   onSubmit: (userInfo: usersData) => void;
@@ -17,18 +22,17 @@ const Seacrch: React.FC<onSubmit> = ({ onSubmit }) => {
     auth: `cad3ef8291154154d3947ebb59788953898ccdeb`,
   });
 
-  const onForm_submit = async (
-    e: React.MouseEvent<HTMLFormElement, MouseEvent>
-  ) => {
-    e.preventDefault();
+  const onForm_submit = async (data: FormData) => {
+    console.log(data.userName);
+
     console.log("onFormSubmit");
 
     const response = await octokit.request("GET /search/users", {
-      q: "kanako",
+      q: data.userName,
     });
 
     const matchedData = response.data.items.filter(
-      (item) => item.login.indexOf("kanako") >= 0
+      (item) => item.login.indexOf(data.userName) >= 0
     );
     console.log(matchedData);
 
@@ -42,30 +46,8 @@ const Seacrch: React.FC<onSubmit> = ({ onSubmit }) => {
     );
   };
 
-  // const onForm_submit = async () => {
-  //  console.log("onFormSubmit");
-
-  // const response = await octokit.request("GET /search/users", {
-  //   q: "kanako",
-  // });
-
-  // const matchedData = response.data.items.filter(
-  //   (item) => item.login.indexOf("kanako") >= 0
-  // );
-  // console.log(matchedData);
-
-  //   onSubmit(
-  //     matchedData.map((item) => ({
-  //       login: item.login,
-  //       avatar_url: item.avatar_url,
-  //       html_url: item.html_url,
-  //     }))
-  //   );
-
-  // };
-
   return (
-    <form onSubmit={onForm_submit}>
+    <form onSubmit={handleSubmit(onForm_submit)}>
       <label>Search User</label>
       <input name="userName" ref={register({ required: true })} />
       {errors.userName && (

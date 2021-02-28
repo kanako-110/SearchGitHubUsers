@@ -1,7 +1,4 @@
-import { render } from "@testing-library/react";
 import React from "react";
-import User from "./User";
-
 
 export type usersData = {
   login: string;
@@ -13,23 +10,21 @@ interface usersType {
   users?: usersData;
 }
 
-
-
-
-const UserList: React.FC<usersType> = (props)=> {
-
-
+const UserList: React.FC<usersType> = (props) => {
   return (
     <div>
-      {props.users ?
-        <div>
-          {/* <img alt="avatar" src={props.users?.avatar_url} />
-          <div> {props.users?.login} </div>
-          <div> {props.users?.html_url} </div> */}
-        </div>
-        :
-        <div>Result will be here... </div>
-      }
+      {props.users?.map((user) =>
+        props.users ? (
+          <div key={user.login}>
+            <img alt="avatar" src={user.avatar_url} />
+            <a href={user.html_url} target="_blank">
+              {user.login}
+            </a>
+          </div>
+        ) : (
+          <div>Result will be here... </div>
+        )
+      )}
     </div>
   );
 };

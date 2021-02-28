@@ -8,10 +8,6 @@ const App: React.FC = () => {
     setUsers(userInfo);
   };
 
-  console.log(users);
-  
-
-
   return (
     <div className="App">
       <Seacrch onSubmit={addUserData} />
