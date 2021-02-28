@@ -19,18 +19,23 @@ const Seacrch: React.FC<onSubmit> = () => {
   });
 
   const onForm_submit = async () => {
-    console.log(
-      await octokit.request("GET /search/users", {
-        q: "kanako",
-      })
+    const response = await octokit.request("GET /search/users", {
+      q: "kanako",
+    });
+
+    const items = response.data.items;
+
+
+    const matchedData =  response.data.items.filter(
+      (item) => item.login.indexOf("kanako") >= 0
     );
+    console.log(matchedData);
+    
+    
+
   };
 
-  // jsonについて
-  // filter
-
   onForm_submit();
-
   return (
     <form onSubmit={onForm_submit}>
       <label>Search User</label>
@@ -45,28 +50,3 @@ const Seacrch: React.FC<onSubmit> = () => {
 
 export default Seacrch;
 
-//userNameをResultに渡す
-// onFormSubmitではこのままuserNameをセット。でもそのセットの目的は「App」に渡すこと。
-// ここではAPpのコールバックに渡す
-// Appでここで行っている、userに入れる行為、resetを行う
-// then AppにuserNameの内容が飛ぶ。Resultで使えるようになる
-
-// const onForm_submit = handleSubmit(({ userName }) => {
-
-// axios.get(`https://api.github.com/users`).then((resp) => {
-//   props.onSubmit({
-//     avatar: resp.data.avatar_url,
-//     login: resp.data.login,
-//     html_url: resp.data.html_url,
-//   });
-//   console.log(resp.data);
-
-//   console.log({
-//     avatar: resp.data.avatar_url,
-//     login: resp.data.login,
-//     html_url: resp.data.html_url,
-//   });
-// });
-// props.setUserName(userName)
-//   reset();
-// });
