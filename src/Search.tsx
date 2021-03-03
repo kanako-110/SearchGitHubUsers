@@ -6,11 +6,8 @@ import axios from "axios";
 import { LOADIPHLPAPI } from "dns";
 
 // TODO
-//▶︎ STILL I CAN HAVE ONLY 30 AT MOST? WHEN I RECEIVE FROM API
 // LOOKS
-// have page if its too many
 // if its necesarry, render "result will be here" when undefined
-// 0の時　ありません
 
 interface AppProps {
   addUserData: (userInfo: usersData) => void;
@@ -39,12 +36,10 @@ const Search: React.FC<AppProps> = ({
       per_page: 50,
     });
     console.log(response);
-    
 
     const matchedData = response.data.items.filter(
       (item) => item.login.indexOf(data.userName) >= 0
     );
-    console.log(matchedData);
 
     // Question: apiからのdataを全て受け取り、全てonSubmitに渡して、それを＠userListで型宣言できないのか？
     // https://docs.github.com/en/rest/reference/search#search-users にある取得データを全てコピーして全てにstringとか書いていく？
