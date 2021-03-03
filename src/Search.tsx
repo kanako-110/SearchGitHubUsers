@@ -1,35 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { usersData } from "./UserList";
 import { Octokit } from "@octokit/core";
+import axios from "axios";
+import { LOADIPHLPAPI } from "dns";
 
 // TODO
-// STILL I CAN HAVE ONLY 30 AT MOST? WHEN I RECEIVE FROM API
+//▶︎ STILL I CAN HAVE ONLY 30 AT MOST? WHEN I RECEIVE FROM API
 // LOOKS
 // have page if its too many
+// if its necesarry, render "result will be here" when undefined
+// 0の時　ありません
 
-interface onSubmit {
-  onSubmit: (userInfo: usersData) => void;
+interface AppProps {
+  addUserData: (userInfo: usersData) => void;
+  passUserName: (searchedName: string) => void;
+  passTotalNumber: (page: number) => void;
 }
 
 interface FormData {
   userName: string;
 }
 
-const Seacrch: React.FC<onSubmit> = ({ onSubmit }) => {
+const Search: React.FC<AppProps> = ({
+  addUserData,
+  passUserName,
+  passTotalNumber,
+}) => {
   const { register, handleSubmit, errors, reset } = useForm<FormData>();
   const octokit = new Octokit({
     auth: `cad3ef8291154154d3947ebb59788953898ccdeb`,
   });
 
   const onForm_submit = async (data: FormData) => {
-    console.log(data.userName);
-
-    console.log("onFormSubmit");
-
     const response = await octokit.request("GET /search/users", {
       q: data.userName,
+      page: 1,
+      per_page: 50,
     });
+    console.log(response);
+    
 
     const matchedData = response.data.items.filter(
       (item) => item.login.indexOf(data.userName) >= 0
@@ -37,13 +47,18 @@ const Seacrch: React.FC<onSubmit> = ({ onSubmit }) => {
     console.log(matchedData);
 
     // Question: apiからのdataを全て受け取り、全てonSubmitに渡して、それを＠userListで型宣言できないのか？
-    onSubmit(
+    // https://docs.github.com/en/rest/reference/search#search-users にある取得データを全てコピーして全てにstringとか書いていく？
+    addUserData(
       matchedData.map((item) => ({
         login: item.login,
         avatar_url: item.avatar_url,
         html_url: item.html_url,
       }))
     );
+    passUserName(data.userName);
+    passTotalNumber(response.data.total_count);
+
+    reset();
   };
 
   return (
@@ -58,4 +73,4 @@ const Seacrch: React.FC<onSubmit> = ({ onSubmit }) => {
   );
 };
 
-export default Seacrch;
+export default Search;
