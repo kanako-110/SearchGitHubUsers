@@ -36,7 +36,10 @@ const Pagination: React.FC<AppProps> = ({
       //50で割った時に整数なら、その整数の答えがページ数
       return totalNumber / per_page;
     }
-    if (totalNumber <= 1000 && Number.isInteger(totalNumber / per_page) === false) {
+    if (
+      totalNumber <= 1000 &&
+      Number.isInteger(totalNumber / per_page) === false
+    ) {
       // 小数点切り捨ての数＋１
       return Math.floor(totalNumber / per_page + 1);
     }
@@ -73,12 +76,13 @@ const Pagination: React.FC<AppProps> = ({
   };
 
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <PageStyle
         count={setPageNumber()}
         color="primary"
         onChange={onButton_click}
         page={page}
+        size="large"
       />
     </div>
   );

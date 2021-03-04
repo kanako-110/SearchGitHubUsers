@@ -28,6 +28,7 @@ const Container = styled("div")`
 const Title = styled("h1")`
   font-family: "Alegreya Sans", sans-serif;
   font-size: 3rem;
+  margin: 3% 0;
 `;
 
 const Search: React.FC<AppProps> = ({
@@ -35,7 +36,7 @@ const Search: React.FC<AppProps> = ({
   passUserName,
   passTotalNumber,
 }) => {
-  const { register, handleSubmit, errors, reset } = useForm<FormData>();
+  const { register, handleSubmit,  reset } = useForm<FormData>();
   const octokit = new Octokit({
     auth: `cad3ef8291154154d3947ebb59788953898ccdeb`,
   });
@@ -71,11 +72,11 @@ const Search: React.FC<AppProps> = ({
       <Container>
         <Title>Search GitHub Users</Title>
         <TextField
+          inputRef={register}
           name="userName"
           id="outlined-basic"
           label="UserName"
           variant="outlined"
-          inputRef={register}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -83,11 +84,8 @@ const Search: React.FC<AppProps> = ({
               </InputAdornment>
             ),
           }}
+          style={{ marginBottom: "5%" }}
         />
-        {/* <input name="userName" ref={register({ required: true })} /> */}
-        {errors.userName && (
-          <div className="error">ユーザー名を入力してください.</div>
-        )}
       </Container>
     </form>
   );

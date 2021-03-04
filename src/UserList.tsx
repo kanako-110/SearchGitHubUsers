@@ -20,11 +20,29 @@ const Container = styled("div")`
 `;
 
 const ItemContainer = styled("div")`
-  width: 20%;
+  width: 18%;
+  padding: 1%;
 `;
 
 const Img = styled("img")`
   width: 100%;
+`;
+
+const breakpoint = 767;
+const UserName = styled("a")`
+  display: block;
+  text-align: center;
+  width: 100%;
+  color: #424242;
+  text-decoration: none;
+  &:hover {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+    color: #81daf5;
+  }
+  @media (max-width: ${breakpoint}px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const UserList: React.FC<usersType> = ({ users, totalNumber }) => {
@@ -34,9 +52,9 @@ const UserList: React.FC<usersType> = ({ users, totalNumber }) => {
         return (
           <ItemContainer key={user.login}>
             <Img alt="avatar" src={user.avatar_url} />
-            <a href={user.html_url} target="_blank">
+            <UserName href={user.html_url} target="_blank">
               {user.login}
-            </a>
+            </UserName>
           </ItemContainer>
         );
       });
