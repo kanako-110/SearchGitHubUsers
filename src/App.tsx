@@ -27,7 +27,7 @@ const App: React.FC = () => {
         passUserName={passUserName}
         passTotalNumber={passTotalNumber}
       />
-      <UserList users={users} totalNumber={totalNumber}/>
+      <UserList users={users} totalNumber={totalNumber} />
       {totalNumber > 50 ? (
         <Pagination
           addUserData={addUserData}

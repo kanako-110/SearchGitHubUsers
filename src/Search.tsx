@@ -2,11 +2,13 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { usersData } from "./UserList";
 import { Octokit } from "@octokit/core";
-import axios from "axios";
-import { LOADIPHLPAPI } from "dns";
+import styled from "@emotion/styled";
+import TextField from "@material-ui/core/TextField";
+import SearchIcon from "@material-ui/icons/Search";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 // TODO
-// LOOKS
+//🌟 LOOKS
 // if its necesarry, render "result will be here" when undefined
 
 interface AppProps {
@@ -18,6 +20,15 @@ interface AppProps {
 interface FormData {
   userName: string;
 }
+
+const Container = styled("div")`
+  text-align: center;
+`;
+
+const Title = styled("h1")`
+  font-family: "Alegreya Sans", sans-serif;
+  font-size: 3rem;
+`;
 
 const Search: React.FC<AppProps> = ({
   addUserData,
@@ -35,7 +46,6 @@ const Search: React.FC<AppProps> = ({
       page: 1,
       per_page: 50,
     });
-    console.log(response);
 
     const matchedData = response.data.items.filter(
       (item) => item.login.indexOf(data.userName) >= 0
@@ -58,12 +68,27 @@ const Search: React.FC<AppProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onForm_submit)}>
-      <label>Search User</label>
-      <input name="userName" ref={register({ required: true })} />
-      {errors.userName && (
-        <div className="error">ユーザー名を入力してください.</div>
-      )}
-      <button type="submit">Search</button>
+      <Container>
+        <Title>Search GitHub Users</Title>
+        <TextField
+          name="userName"
+          id="outlined-basic"
+          label="UserName"
+          variant="outlined"
+          inputRef={register}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+        {/* <input name="userName" ref={register({ required: true })} /> */}
+        {errors.userName && (
+          <div className="error">ユーザー名を入力してください.</div>
+        )}
+      </Container>
     </form>
   );
 };

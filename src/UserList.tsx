@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "@emotion/styled";
 
 export type usersData = {
   login: string;
@@ -11,73 +12,40 @@ interface usersType {
   totalNumber: number; //まとめられる？
 }
 
+const Container = styled("div")`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+`;
+
+const ItemContainer = styled("div")`
+  width: 20%;
+`;
+
+const Img = styled("img")`
+  width: 100%;
+`;
+
 const UserList: React.FC<usersType> = ({ users, totalNumber }) => {
   const displayOnDeskTop = () => {
     if (users && users?.length > 0) {
-      return (
-        <div>
-          {users?.map((user) => (
-            <div key={user.login}>
-              <img alt="avatar" src={user.avatar_url} />
-              <a href={user.html_url} target="_blank">
-                {user.login}
-              </a>
-            </div>
-          ))}
-        </div>
-      );
+      return users.map((user) => {
+        return (
+          <ItemContainer key={user.login}>
+            <Img alt="avatar" src={user.avatar_url} />
+            <a href={user.html_url} target="_blank">
+              {user.login}
+            </a>
+          </ItemContainer>
+        );
+      });
     }
     if (users?.length === 0) {
       return <div>当てはまるユーザーがいません</div>;
     }
   };
 
-  return <div>{displayOnDeskTop()}</div>;
+  return <Container>{displayOnDeskTop()}</Container>;
 };
 export default UserList;
-
-// users.map((user) => {
-
-//   return (
-//     <div key={user.login}>
-//       <img alt="avatar" src={user.avatar_url} />
-//       <a href={user.html_url} target="_blank">
-//         {user.login}
-//       </a>
-//     </div>
-//   );
-// });
-
-// return (
-//   <div>
-//     {displayOnDeskTop()}
-//     {/* {users?.map((user) =>
-//       users.length > 0 ? (
-//         <div key={user.login}>
-//           <img alt="avatar" src={user.avatar_url} />
-//           <a href={user.html_url} target="_blank">
-//             {user.login}
-//           </a>
-//         </div>
-//       ) : (
-//         <div>それ以外</div>
-//       )
-//     )} */}
-//   </div>
-// );
-
-// -----------正しいやつ
-// if (users && users?.length > 0) {
-//   return (
-//     <div>
-//       {users?.map((user) => (
-//         <div key={user.login}>
-//           <img alt="avatar" src={user.avatar_url} />
-//           <a href={user.html_url} target="_blank">
-//             {user.login}
-//           </a>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// ーーーーーー
