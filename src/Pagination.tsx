@@ -31,7 +31,7 @@ const Pagination: React.FC<AppProps> = ({
   // --------------------
 
   const [page, setPage] = useState(1);
-  const [usersData, setUsersData] = useState([]);
+  const [usersData, setUsersData] = useState<usersData | []>([]);
   const octokit = new Octokit({
     auth: `cad3ef8291154154d3947ebb59788953898ccdeb`,
   });
