@@ -40,5 +40,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-// create next app

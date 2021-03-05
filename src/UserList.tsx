@@ -60,7 +60,7 @@ const UserList: React.FC<usersType> = ({ users }) => {
       });
     }
     if (users?.length === 0) {
-      return <p style={{ margin: "auto" }}>当てはまるユーザーがいません😥</p>;
+      return <div>当てはまるユーザーがいません</div>;
     }
   };
 

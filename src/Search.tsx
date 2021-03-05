@@ -7,7 +7,6 @@ import TextField from "@material-ui/core/TextField";
 import SearchIcon from "@material-ui/icons/Search";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
-
 interface AppProps {
   addUserData: (userInfo: usersData) => void;
   passUserName: (searchedName: string) => void;
@@ -35,7 +34,7 @@ const Search: React.FC<AppProps> = ({
 }) => {
   const { register, handleSubmit, reset, errors } = useForm<FormData>();
   const octokit = new Octokit({
-    auth: `cad3ef8291154154d3947ebb59788953898ccdeb`,
+    auth: `abce6e13570e9da1c036837499204a63d8f505c7`,
   });
 
   const onForm_submit = async (data: FormData) => {

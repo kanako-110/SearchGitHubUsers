@@ -26,7 +26,7 @@ const Pagination: React.FC<AppProps> = ({
   const [page, setPage] = useState(1);
   const [usersData, setUsersData] = useState<usersData | []>([]);
   const octokit = new Octokit({
-    auth: `cad3ef8291154154d3947ebb59788953898ccdeb`,
+    auth: `abce6e13570e9da1c036837499204a63d8f505c7`,
   });
 
   const per_page = 50;
@@ -53,8 +53,10 @@ const Pagination: React.FC<AppProps> = ({
   ) => {
     setPage(page);
 
-    // 👉if(まだこのページを開いてない時===userData.page(key名)にそのページが含まれていない時)、apiからfetch
+    //👉 if(userData.page(key名)にそのページが含まれていない時===まだ一回もこのページを開いてない時)、apiからfetch
     if (!usersData.some((item) => item.page === page)) {
+      console.log("初めてこのページクリック");
+      // ----get data for each pages, when clicking button
       const response = await octokit.request("GET /search/users", {
         q: searchedName,
         page: page,
@@ -75,6 +77,7 @@ const Pagination: React.FC<AppProps> = ({
       setUsersData([...usersData, ...dataWithPage]);
     } //👉if(すでにそのページの情報をfetchしたことがある===そのページ数をuserDataが含んでいる場合)
     if (usersData.some((item) => item.page === page)) {
+      console.log("すでにこのページに来たことあり");
       const thisPageData = usersData.filter((item) => item.page === page);
       addUsersData(
         thisPageData.map((item) => ({
