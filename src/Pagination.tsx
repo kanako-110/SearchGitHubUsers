@@ -6,16 +6,9 @@ import { usersData } from "./UserList";
 
 interface AppProps {
   addUsersData: (userInfo: usersData) => void;
-  searchedName: string; //まとめられる？
+  searchedName: string;
   totalNumber: number;
 }
-
-type sample = {
-  login: string;
-  avatar_url: string;
-  html_url: string;
-  page: number;
-};
 
 const Pagination: React.FC<AppProps> = ({
   addUsersData,
@@ -60,11 +53,8 @@ const Pagination: React.FC<AppProps> = ({
   ) => {
     setPage(page);
 
-    // まだ一回もこのページを開いてない時、apiからfetch
-    //  === if(userData.page(key名)にそのページが含まれていない時)
+    // 👉if(まだこのページを開いてない時===userData.page(key名)にそのページが含まれていない時)、apiからfetch
     if (!usersData.some((item) => item.page === page)) {
-      console.log("初めてこのページクリック");
-      // ----get data for each pages, when clicking button
       const response = await octokit.request("GET /search/users", {
         q: searchedName,
         page: page,
@@ -83,9 +73,8 @@ const Pagination: React.FC<AppProps> = ({
       }));
       addUsersData(dataWithPage);
       setUsersData([...usersData, ...dataWithPage]);
-    } //if(すでにそのページの情報をfetchしたことがある===そのページ数をuserDataが含んでいる場合)
+    } //👉if(すでにそのページの情報をfetchしたことがある===そのページ数をuserDataが含んでいる場合)
     if (usersData.some((item) => item.page === page)) {
-      console.log("すでにこのページに来たことあり");
       const thisPageData = usersData.filter((item) => item.page === page);
       addUsersData(
         thisPageData.map((item) => ({
@@ -97,7 +86,6 @@ const Pagination: React.FC<AppProps> = ({
       );
     }
   };
-
 
   return (
     <div style={{ textAlign: "center" }}>

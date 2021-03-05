@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { usersData } from "./UserList";
 import { Octokit } from "@octokit/core";
@@ -7,9 +7,6 @@ import TextField from "@material-ui/core/TextField";
 import SearchIcon from "@material-ui/icons/Search";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
-// TODO
-//🌟 LOOKS
-// if its necesarry, render "result will be here" when undefined
 
 interface AppProps {
   addUserData: (userInfo: usersData) => void;
@@ -36,7 +33,7 @@ const Search: React.FC<AppProps> = ({
   passUserName,
   passTotalNumber,
 }) => {
-  const { register, handleSubmit, reset } = useForm<FormData>();
+  const { register, handleSubmit, reset, errors } = useForm<FormData>();
   const octokit = new Octokit({
     auth: `cad3ef8291154154d3947ebb59788953898ccdeb`,
   });
@@ -52,13 +49,12 @@ const Search: React.FC<AppProps> = ({
       (item) => item.login.indexOf(data.userName) >= 0
     );
 
-    // Question: apiからのdataを全て受け取り、全てonSubmitに渡して、それを＠userListで型宣言できないのか？
-    // https://docs.github.com/en/rest/reference/search#search-users にある取得データを全てコピーして全てにstringとか書いていく？
     addUserData(
       matchedData.map((item) => ({
         login: item.login,
         avatar_url: item.avatar_url,
         html_url: item.html_url,
+        page: 1,
       }))
     );
     passUserName(data.userName);
@@ -72,7 +68,7 @@ const Search: React.FC<AppProps> = ({
       <Container>
         <Title>Search GitHub Users</Title>
         <TextField
-          inputRef={register}
+          inputRef={register({ required: true })}
           name="userName"
           id="outlined-basic"
           label="UserName"
@@ -86,6 +82,7 @@ const Search: React.FC<AppProps> = ({
           }}
           style={{ marginBottom: "5%" }}
         />
+        {errors.userName && <p>ユーザー名を入力してください🙇‍♂️🙇‍♀️</p>}
       </Container>
     </form>
   );

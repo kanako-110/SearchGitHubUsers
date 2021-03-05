@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Search from "./Search";
-import UserList, { usersData } from "./UserList"; //普通のexportだけだと{}
+import UserList, { usersData } from "./UserList";
 import Pagination from "./Pagination";
 
 const App: React.FC = () => {
@@ -9,7 +9,6 @@ const App: React.FC = () => {
   const [totalNumber, setTotalNumber] = useState(0);
 
   const addUsersData = (userInfo: usersData) => {
-    console.log(userInfo);
     setUsers(userInfo);
   };
 
@@ -28,7 +27,7 @@ const App: React.FC = () => {
         passUserName={passUserName}
         passTotalNumber={passTotalNumber}
       />
-      <UserList users={users} totalNumber={totalNumber} />
+      <UserList users={users} />
       {totalNumber > 50 ? (
         <Pagination
           addUsersData={addUsersData}

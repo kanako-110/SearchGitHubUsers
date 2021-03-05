@@ -10,7 +10,6 @@ export type usersData = {
 
 interface usersType {
   users?: usersData;
-  totalNumber: number; //まとめられる？
 }
 
 const Container = styled("div")`
@@ -46,7 +45,7 @@ const UserName = styled("a")`
   }
 `;
 
-const UserList: React.FC<usersType> = ({ users, totalNumber }) => {
+const UserList: React.FC<usersType> = ({ users }) => {
   const displayOnDeskTop = () => {
     if (users && users?.length > 0) {
       return users.map((user) => {
@@ -61,7 +60,7 @@ const UserList: React.FC<usersType> = ({ users, totalNumber }) => {
       });
     }
     if (users?.length === 0) {
-      return <div>当てはまるユーザーがいません</div>;
+      return <p style={{ margin: "auto" }}>当てはまるユーザーがいません😥</p>;
     }
   };
 
