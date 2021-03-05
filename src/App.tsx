@@ -8,7 +8,8 @@ const App: React.FC = () => {
   const [searchedName, setSearchedName] = useState<string>("");
   const [totalNumber, setTotalNumber] = useState(0);
 
-  const addUserData = (userInfo: usersData) => {
+  const addUsersData = (userInfo: usersData) => {
+    console.log(userInfo);
     setUsers(userInfo);
   };
 
@@ -23,14 +24,14 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <Search
-        addUserData={addUserData}
+        addUserData={addUsersData}
         passUserName={passUserName}
         passTotalNumber={passTotalNumber}
       />
       <UserList users={users} totalNumber={totalNumber} />
       {totalNumber > 50 ? (
         <Pagination
-          addUserData={addUserData}
+          addUsersData={addUsersData}
           searchedName={searchedName}
           totalNumber={totalNumber}
         />

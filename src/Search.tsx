@@ -36,7 +36,7 @@ const Search: React.FC<AppProps> = ({
   passUserName,
   passTotalNumber,
 }) => {
-  const { register, handleSubmit,  reset } = useForm<FormData>();
+  const { register, handleSubmit, reset } = useForm<FormData>();
   const octokit = new Octokit({
     auth: `cad3ef8291154154d3947ebb59788953898ccdeb`,
   });

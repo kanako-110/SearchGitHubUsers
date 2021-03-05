@@ -5,13 +5,20 @@ import { Octokit } from "@octokit/core";
 import { usersData } from "./UserList";
 
 interface AppProps {
-  addUserData: (userInfo: usersData) => void;
+  addUsersData: (userInfo: usersData) => void;
   searchedName: string; //まとめられる？
   totalNumber: number;
 }
 
+type sample = {
+  login: string;
+  avatar_url: string;
+  html_url: string;
+  page: number;
+};
+
 const Pagination: React.FC<AppProps> = ({
-  addUserData,
+  addUsersData,
   searchedName,
   totalNumber,
 }) => {
@@ -24,11 +31,10 @@ const Pagination: React.FC<AppProps> = ({
   // --------------------
 
   const [page, setPage] = useState(1);
+  const [usersData, setUsersData] = useState([]);
   const octokit = new Octokit({
     auth: `cad3ef8291154154d3947ebb59788953898ccdeb`,
   });
-
-  console.log("total: " + totalNumber);
 
   const per_page = 50;
   const setPageNumber = () => {
@@ -54,34 +60,52 @@ const Pagination: React.FC<AppProps> = ({
   ) => {
     setPage(page);
 
-    // ----get data for each pages, when clicking button
-    const response = await octokit.request("GET /search/users", {
-      q: searchedName,
-      page: page,
-      per_page: 50,
-    });
-    console.log(response);
+    // まだ一回もこのページを開いてない時、apiからfetch
+    //  === if(userData.page(key名)にそのページが含まれていない時)
+    if (!usersData.some((item) => item.page === page)) {
+      console.log("初めてこのページクリック");
+      // ----get data for each pages, when clicking button
+      const response = await octokit.request("GET /search/users", {
+        q: searchedName,
+        page: page,
+        per_page: 50,
+      });
 
-    const matchedData = response.data.items.filter(
-      (item) => item.login.indexOf(searchedName) >= 0
-    );
+      const matchedData = response.data.items.filter(
+        (item) => item.login.indexOf(searchedName) >= 0
+      );
 
-    addUserData(
-      matchedData.map((item) => ({
+      const dataWithPage = matchedData.map((item) => ({
         login: item.login,
         avatar_url: item.avatar_url,
         html_url: item.html_url,
-      }))
-    );
+        page: page,
+      }));
+      addUsersData(dataWithPage);
+      setUsersData([...usersData, ...dataWithPage]);
+    } //if(すでにそのページの情報をfetchしたことがある===そのページ数をuserDataが含んでいる場合)
+    if (usersData.some((item) => item.page === page)) {
+      console.log("すでにこのページに来たことあり");
+      const thisPageData = usersData.filter((item) => item.page === page);
+      addUsersData(
+        thisPageData.map((item) => ({
+          login: item.login,
+          avatar_url: item.avatar_url,
+          html_url: item.html_url,
+          page: page,
+        }))
+      );
+    }
   };
+
 
   return (
     <div style={{ textAlign: "center" }}>
       <PageStyle
         count={setPageNumber()}
         color="primary"
-        onChange={onButton_click}
         page={page}
+        onChange={onButton_click}
         size="large"
       />
     </div>

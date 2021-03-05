@@ -5,6 +5,7 @@ export type usersData = {
   login: string;
   avatar_url: string;
   html_url: string;
+  page: number;
 }[];
 
 interface usersType {
