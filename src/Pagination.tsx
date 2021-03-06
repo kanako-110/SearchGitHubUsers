@@ -6,18 +6,18 @@ import { usersData } from "./UserList";
 import { ApiTypes } from "../types/Api";
 
 interface AppProps {
-  addUsersData: (userInfo: usersData) => void;
   searchedName: string;
   totalNumber: number;
   page: number;
+  addUsersData: (userInfo: usersData) => void;
   onPageButtonClick: (page: number) => void;
 }
 
 const Pagination: React.FC<AppProps> = ({
-  addUsersData,
   searchedName,
   totalNumber,
   page,
+  addUsersData,
   onPageButtonClick,
 }) => {
   // -----👗styling-------
