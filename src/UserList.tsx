@@ -6,6 +6,7 @@ export type usersData = {
   avatar_url: string;
   html_url: string;
   page: number;
+  searchedName: string;
 }[];
 
 interface usersType {
@@ -60,7 +61,7 @@ const UserList: React.FC<usersType> = ({ users }) => {
       });
     }
     if (users?.length === 0) {
-      return <div>当てはまるユーザーがいません</div>;
+      return <p style={{ margin: "auto" }}>当てはまるユーザーがいません😥</p>;
     }
   };
 

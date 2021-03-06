@@ -1,19 +1,24 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import MuiPagination from "@material-ui/lab/Pagination";
-import { Octokit } from "@octokit/core";
 import { usersData } from "./UserList";
+import { ApiTypes } from "../Types/Api";
 
 interface AppProps {
   addUsersData: (userInfo: usersData) => void;
   searchedName: string;
   totalNumber: number;
+  page: number;
+  onPageButtonClick: (page: number) => void;
 }
 
 const Pagination: React.FC<AppProps> = ({
   addUsersData,
   searchedName,
   totalNumber,
+  page,
+  onPageButtonClick,
 }) => {
   // -----styling-------
   const PageStyle = withStyles({
@@ -23,11 +28,7 @@ const Pagination: React.FC<AppProps> = ({
   })(MuiPagination);
   // --------------------
 
-  const [page, setPage] = useState(1);
   const [usersData, setUsersData] = useState<usersData | []>([]);
-  const octokit = new Octokit({
-    auth: `abce6e13570e9da1c036837499204a63d8f505c7`,
-  });
 
   const per_page = 50;
   const setPageNumber = () => {
@@ -47,37 +48,17 @@ const Pagination: React.FC<AppProps> = ({
     }
   };
 
-  const onButton_click = async (
-    e: React.ChangeEvent<unknown>,
-    page: number
-  ) => {
-    setPage(page);
+  const onButton_click = (e: React.ChangeEvent<unknown>, page: number) => {
+    onPageButtonClick(page);
 
-    //👉 if(userData.page(key名)にそのページが含まれていない時===まだ一回もこのページを開いてない時)、apiからfetch
-    if (!usersData.some((item) => item.page === page)) {
-      console.log("初めてこのページクリック");
-      // ----get data for each pages, when clicking button
-      const response = await octokit.request("GET /search/users", {
-        q: searchedName,
-        page: page,
-        per_page: 50,
-      });
-
-      const matchedData = response.data.items.filter(
-        (item) => item.login.indexOf(searchedName) >= 0
-      );
-
-      const dataWithPage = matchedData.map((item) => ({
-        login: item.login,
-        avatar_url: item.avatar_url,
-        html_url: item.html_url,
-        page: page,
-      }));
-      addUsersData(dataWithPage);
-      setUsersData([...usersData, ...dataWithPage]);
-    } //👉if(すでにそのページの情報をfetchしたことがある===そのページ数をuserDataが含んでいる場合)
-    if (usersData.some((item) => item.page === page)) {
-      console.log("すでにこのページに来たことあり");
+    // -------🌟Get Users Data--------
+    // 👉押したページのデータをすでに取得したことがある場合、ローカルのデータから情報取得する
+    //  = if(userDataの中に、①item.page === 押したページ数　&& ②　item.searchedName ===検索した名前　の両方を持つものがある
+    if (
+      usersData.some(
+        (item) => item.page === page && item.searchedName === searchedName
+      )
+    ) {
       const thisPageData = usersData.filter((item) => item.page === page);
       addUsersData(
         thisPageData.map((item) => ({
@@ -85,9 +66,39 @@ const Pagination: React.FC<AppProps> = ({
           avatar_url: item.avatar_url,
           html_url: item.html_url,
           page: page,
+          searchedName: searchedName,
         }))
       );
     }
+    // 👉それ以外(この検索ネームでこのページが初めての時)は全てAPIから取得
+    else {
+      axios
+        .get("https://api.github.com/search/users", {
+          params: {
+            q: searchedName,
+            page: page,
+            per_page: 50,
+          },
+        })
+        .then((resp) => {
+          const matchedData = resp.data.items.filter(
+            (item: ApiTypes) => item.login.indexOf(searchedName) >= 0
+          );
+          const dataWithPage = matchedData.map((item: ApiTypes) => ({
+            login: item.login,
+            avatar_url: item.avatar_url,
+            html_url: item.html_url,
+            page: page,
+            searchedName: searchedName,
+          }));
+          addUsersData(dataWithPage);
+          setUsersData([...usersData, ...dataWithPage]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    // ----------------------
   };
 
   return (
