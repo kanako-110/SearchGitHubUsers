@@ -20,7 +20,7 @@ const Pagination: React.FC<AppProps> = ({
   page,
   onPageButtonClick,
 }) => {
-  // -----styling-------
+  // -----👗styling-------
   const PageStyle = withStyles({
     root: {
       display: "inline-block",
@@ -51,7 +51,7 @@ const Pagination: React.FC<AppProps> = ({
   const onButton_click = (e: React.ChangeEvent<unknown>, page: number) => {
     onPageButtonClick(page);
 
-    // -------🌟Get Users Data--------
+    // -----------🌟Get Users Data-----------
     // 👉押したページのデータをすでに取得したことがある場合、ローカルのデータから情報取得する
     //  = if(userDataの中に、①item.page === 押したページ数　&& ②　item.searchedName ===検索した名前　の両方を持つものがある
     if (

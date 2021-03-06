@@ -47,6 +47,13 @@ const UserName = styled("a")`
   }
 `;
 
+const Text = styled("p")`
+margin: auto;
+@media (max-width: ${breakpoint}px) {
+  font-size: 0.8rem;
+}
+`
+
 const UserList: React.FC<usersType> = ({ users }) => {
   const displayOnDeskTop = () => {
     if (users && users?.length > 0) {
@@ -62,7 +69,7 @@ const UserList: React.FC<usersType> = ({ users }) => {
       });
     }
     if (users?.length === 0) {
-      return <p style={{ margin: "auto" }}>当てはまるユーザーがいません😥</p>;
+      return <Text style={{ margin: "auto" }}>当てはまるユーザーがいません😥</Text>;
     }
   };
 

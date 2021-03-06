@@ -59,7 +59,7 @@ const Search: React.FC<AppProps> = ({
             searchedName: data.userName,
           }))
         );
-        passUserName(data.userName); //searchedName渡したからいらなくなる？
+        passUserName(data.userName);
         passTotalNumber(resp.data.total_count);
       })
       .catch((err) => {
