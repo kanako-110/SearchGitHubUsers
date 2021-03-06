@@ -3,7 +3,7 @@ import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import MuiPagination from "@material-ui/lab/Pagination";
 import { usersData } from "./UserList";
-import { ApiTypes } from "../Types/Api";
+import { ApiTypes } from "../types/Api";
 
 interface AppProps {
   addUsersData: (userInfo: usersData) => void;

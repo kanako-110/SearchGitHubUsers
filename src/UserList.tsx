@@ -36,6 +36,7 @@ const UserName = styled("a")`
   width: 100%;
   color: #424242;
   text-decoration: none;
+  word-break: break-all;
   &:hover {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);

@@ -6,7 +6,7 @@ import styled from "@emotion/styled";
 import TextField from "@material-ui/core/TextField";
 import SearchIcon from "@material-ui/icons/Search";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import { ApiTypes } from "../Types/Api";
+import { ApiTypes } from "../types/Api";
 
 interface AppProps {
   addUserData: (userInfo: usersData) => void;
